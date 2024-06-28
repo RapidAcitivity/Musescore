@@ -84,10 +84,7 @@ function installBottleManually {
   brew link $1
 }
 
-installBottleManually libogg
-installBottleManually libvorbis
-installBottleManually flac
-installBottleManually libsndfile
+brew install libogg libvorbis flac libsndfile --quiet
 
 # fixing install python 3.9 error (it is a dependency for ninja)
 # rm '/usr/local/bin/2to3'
