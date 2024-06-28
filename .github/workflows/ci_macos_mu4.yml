@@ -5,9 +5,9 @@ on:
     branches:
     - master
     
-  schedule:
-    - cron: '0 3 */1 */1 *' # At 03:00 on every day-of-month for master
-    - cron: '0 5 */1 */1 *' # At 05:00 on every day-of-month for current release branch
+  #schedule:
+  #  - cron: '0 3 */1 */1 *' # At 03:00 on every day-of-month for master
+  #  - cron: '0 5 */1 */1 *' # At 05:00 on every day-of-month for current release branch
   workflow_dispatch:
     inputs:
       build_mode:
@@ -29,7 +29,7 @@ env:
 
 jobs:
   build_mu4:    
-    runs-on: macos-13
+    runs-on: macos-latest
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.12.1
@@ -187,7 +187,7 @@ jobs:
         echo "============== ccache ==============="
         ccache -s
     - name: Generate dump symbols
-      if: env.DO_BUILD == 'true'
+      if: env.DO_BUILD == 'false'
       run: |
         bash ./buildscripts/ci/macos/dumpsyms.sh  
     - name: Package 
