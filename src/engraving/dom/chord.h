@@ -193,6 +193,8 @@ public:
     size_t graceIndex() const { return m_graceIndex; }
     void setGraceIndex(size_t val) { m_graceIndex = val; }
 
+    Chord* graceNoteAt(size_t idx) const;
+
     int upLine() const override;
     int downLine() const override;
     PointF stemPos() const override;            ///< page coordinates
@@ -272,8 +274,6 @@ public:
     void sortNotes();
 
     Chord* nextTiedChord(bool backwards = false, bool sameSize = true) const;
-    bool containsTieEnd() const;
-    bool containsTieStart() const;
 
     Fraction endTickIncludingTied() const;
 

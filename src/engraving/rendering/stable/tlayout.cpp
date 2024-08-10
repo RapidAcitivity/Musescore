@@ -698,7 +698,7 @@ void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, 
 //        return;
 //    }
 
-    if (conf.styleB(Sid::ArpeggioHiddenInStdIfTab)) {
+    if (conf.styleB(Sid::arpeggioHiddenInStdIfTab)) {
         if (item->staff() && item->staff()->isPitchedStaff(item->tick())) {
             for (Staff* s : item->staff()->staffList()) {
                 if (s->onSameScore(item) && s->isTabStaff(item->tick()) && s->visible()) {
@@ -740,7 +740,7 @@ void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, 
         double top = -item->userLen1();
         switch (item->arpeggioType()) {
         case ArpeggioType::BRACKET: {
-            double lineWidth = conf.styleMM(Sid::ArpeggioLineWidth);
+            double lineWidth = conf.styleMM(Sid::arpeggioLineWidth);
             return top - lineWidth / 2.0;
         }
         case ArpeggioType::NORMAL:
@@ -774,7 +774,7 @@ void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, 
 
         switch (item->arpeggioType()) {
         case ArpeggioType::BRACKET: {
-            double lineWidth = conf.styleMM(Sid::ArpeggioLineWidth);
+            double lineWidth = conf.styleMM(Sid::arpeggioLineWidth);
             return bottom - top + lineWidth;
         }
         case ArpeggioType::NORMAL:
@@ -847,7 +847,7 @@ void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, 
     } break;
 
     case ArpeggioType::BRACKET: {
-        double w  = conf.styleS(Sid::ArpeggioHookLen).val() * item->spatium();
+        double w  = conf.styleS(Sid::arpeggioHookLen).val() * item->spatium();
         ldata->setBbox(RectF(0.0, ldata->top, w, ldata->bottom));
     } break;
     }
@@ -1427,7 +1427,7 @@ void TLayout::layoutBracket(const Bracket* item, Bracket::LayoutData* ldata, con
 
     switch (item->bracketType()) {
     case BracketType::BRACE: {
-        String musicalSymbolFont = conf.styleSt(Sid::MusicalSymbolFont);
+        String musicalSymbolFont = conf.styleSt(Sid::musicalSymbolFont);
         if (musicalSymbolFont == "Emmentaler" || musicalSymbolFont == "Gonville") {
             ldata->braceSymbol = SymId::noSym;
             double w = conf.styleMM(Sid::akkoladeWidth);
@@ -1479,7 +1479,7 @@ void TLayout::layoutBracket(const Bracket* item, Bracket::LayoutData* ldata, con
         double w = conf.styleMM(Sid::bracketWidth) * .5;
         double x = -w;
 
-        double bd = (conf.styleSt(Sid::MusicalSymbolFont) == "Leland") ? spatium * .5 : spatium * .25;
+        double bd = (conf.styleSt(Sid::musicalSymbolFont) == "Leland") ? spatium * .5 : spatium * .25;
         ldata->shape.add(RectF(x, -bd, w * 2, 2 * (ldata->bracketHeight * 0.5 + bd)));
         ldata->shape.add(item->symBbox(SymId::bracketTop).translated(PointF(-w, -bd)));
         ldata->shape.add(item->symBbox(SymId::bracketBottom).translated(PointF(-w, bd + ldata->bracketHeight)));
@@ -1533,7 +1533,7 @@ void TLayout::layoutBreath(const Breath* item, Breath::LayoutData* ldata, const 
     int voiceOffset = item->placeBelow() * (item->staff()->lines(item->tick()) - 1) * item->spatium();
     if (item->isCaesura()) {
         ldata->setPosY(item->spatium() + voiceOffset);
-    } else if ((conf.styleSt(Sid::MusicalSymbolFont) == "Emmentaler") && (item->symId() == SymId::breathMarkComma)) {
+    } else if ((conf.styleSt(Sid::musicalSymbolFont) == "Emmentaler") && (item->symId() == SymId::breathMarkComma)) {
         ldata->setPosY(0.5 * item->spatium() + voiceOffset);
     } else {
         ldata->setPosY(-0.5 * item->spatium() + voiceOffset);
@@ -2459,8 +2459,8 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
 void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData* ldata, const LayoutContext& ctx)
 {
     double spatium  = item->spatium() * item->userMag();
-    ldata->stringLw = spatium * 0.08;
-    ldata->nutLw = ((item->fretOffset() || !item->showNut()) ? ldata->stringLw : spatium * 0.2);
+    ldata->stringLineWidth = spatium * 0.08;
+    ldata->nutLineWidth = ((item->fretOffset() || !item->showNut()) ? ldata->stringLineWidth : spatium * 0.2);
     ldata->stringDist = ctx.conf().styleMM(Sid::fretStringSpacing) * item->userMag();
     ldata->fretDist = ctx.conf().styleMM(Sid::fretFretSpacing) * item->userMag();
     ldata->markerSize = ldata->stringDist * .8;
@@ -2472,8 +2472,8 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
 
     // Allocate space for fret offset number
     if (item->fretOffset() > 0) {
-        Font scaledFont(item->font());
-        scaledFont.setPointSizeF(item->font().pointSizeF() * item->userMag());
+        Font scaledFont(item->fretNumFont());
+        scaledFont.setPointSizeF(scaledFont.pointSizeF() * item->userMag());
 
         double fretNumMag = ctx.conf().styleD(Sid::fretNumMag);
         scaledFont.setPointSizeF(scaledFont.pointSizeF() * fretNumMag);
@@ -2506,7 +2506,7 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
     double noteheadWidth = 0;
     if (pSeg->isChordRestType()) {
         staff_idx_t idx = item->staff()->idx();
-        for (EngravingItem* e = pSeg->firstElementOfSegment(pSeg, idx); e; e = pSeg->nextElementOfSegment(pSeg, e, idx)) {
+        for (EngravingItem* e = pSeg->firstElementOfSegment(idx); e; e = pSeg->nextElementOfSegment(e, idx)) {
             if (e->isRest()) {
                 const Rest* r = toRest(e);
                 LD_CONDITION(r->ldata()->sym.has_value());
@@ -3396,10 +3396,10 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
                 newPosX = 0.0;
                 break;
             case AlignH::HCENTER:
-                newPosX = fd->centerX();
+                newPosX = 0.5 * fd->mainWidth();
                 break;
             case AlignH::RIGHT:
-                newPosX = fd->rightX();
+                newPosX = fd->mainWidth();
                 break;
             }
         } else {
@@ -5156,7 +5156,7 @@ void TLayout::layoutStemSlash(const StemSlash* item, StemSlash::LayoutData* ldat
     double endY = 0;
 
     if (hook) {
-        auto musicFont = conf.styleSt(Sid::MusicalSymbolFont);
+        auto musicFont = conf.styleSt(Sid::musicalSymbolFont);
         // HACK: adjust slash angle for fonts with "fat" hooks. In future, we must use smufl cutOut
         if (c->beams() >= 2 && !straight
             && (musicFont == "Bravura" || musicFont == "Finale Maestro" || musicFont == "Gonville")) {

@@ -50,8 +50,6 @@ class HairpinSegment final : public TextLineBaseSegment
 public:
     HairpinSegment(Hairpin* sp, System* parent);
 
-    int subtype() const override;
-
     HairpinSegment* clone() const override { return new HairpinSegment(*this); }
 
     Hairpin* hairpin() const { return (Hairpin*)spanner(); }
@@ -65,12 +63,15 @@ public:
 
     EngravingItem* propertyDelegate(Pid) override;
 
+    int subtype() const override;
+    TranslatableString subtypeUserName() const override;
+
     int gripsCount() const override;
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
 
     std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged) override;
 
-    bool hasVoiceApplicationProperties() const override { return spanner()->hasVoiceApplicationProperties(); }
+    bool hasVoiceAssignmentProperties() const override { return spanner()->hasVoiceAssignmentProperties(); }
 
     EngravingItem* findElementToSnapBefore() const;
     EngravingItem* findElementToSnapAfter() const;
@@ -109,10 +110,11 @@ public:
 
     Hairpin* clone() const override { return new Hairpin(*this); }
 
-    int subtype() const override;
-
     DynamicType dynamicTypeFrom() const;
     DynamicType dynamicTypeTo() const;
+
+    const Dynamic* dynamicSnappedBefore() const;
+    const Dynamic* dynamicSnappedAfter() const;
 
     HairpinType hairpinType() const { return m_hairpinType; }
     void setHairpinType(HairpinType val);
@@ -127,7 +129,7 @@ public:
     void setVeloChange(int v) { m_veloChange = v; }
 
     DynamicRange dynRange() const { return m_dynRange; }
-    void setDynRange(DynamicRange t) { m_dynRange = t; }
+    void setDynRange(DynamicRange t);
 
     Spatium hairpinHeight() const { return m_hairpinHeight; }
     void setHairpinHeight(Spatium val) { m_hairpinHeight = val; }
@@ -140,9 +142,6 @@ public:
 
     ChangeMethod veloChangeMethod() const { return m_veloChangeMethod; }
     void setVeloChangeMethod(ChangeMethod val) { m_veloChangeMethod = val; }
-
-    bool playHairpin() const { return m_playHairpin; }
-    void setPlayHairpin(bool val) { m_playHairpin = val; }
 
     bool isCrescendo() const
     {
@@ -166,12 +165,12 @@ public:
 
     PointF linePos(Grip grip, System** system) const override;
 
-    bool hasVoiceApplicationProperties() const override { return true; }
+    bool hasVoiceAssignmentProperties() const override { return true; }
 
     void reset() override;
 
-    void setApplyToVoice(VoiceApplication v) { m_applyToVoice = v; }
-    VoiceApplication applyToVoice() const { return m_applyToVoice; }
+    void setVoiceAssignment(VoiceAssignment v) { m_voiceAssignment = v; }
+    VoiceAssignment voiceAssignment() const { return m_voiceAssignment; }
     void setDirection(DirectionV v) { m_direction = v; }
     DirectionV direction() const { return m_direction; }
     void setCenterBetweenStaves(AutoOnOff v) { m_centerBetweenStaves = v; }
@@ -182,6 +181,9 @@ public:
     bool snapToItemAfter() const { return m_snapToItemAfter; }
     void setSnapToItemAfter(bool v) { m_snapToItemAfter = v; }
 
+    int subtype() const override { return int(m_hairpinType); }
+    TranslatableString subtypeUserName() const override;
+
 private:
 
     Sid getPropertyStyle(Pid) const override;
@@ -189,15 +191,14 @@ private:
     HairpinType m_hairpinType = HairpinType::INVALID;
     int m_veloChange = 0;
     bool m_hairpinCircledTip = false;
-    DynamicRange m_dynRange = DynamicRange::STAFF;
+    DynamicRange m_dynRange = DynamicRange::PART;
     bool m_singleNoteDynamics = false;
     ChangeMethod m_veloChangeMethod = ChangeMethod::NORMAL;
-    bool m_playHairpin = false;
 
     Spatium m_hairpinHeight;
     Spatium m_hairpinContHeight;
 
-    VoiceApplication m_applyToVoice = VoiceApplication::ALL_VOICE_IN_INSTRUMENT;
+    VoiceAssignment m_voiceAssignment = VoiceAssignment::ALL_VOICE_IN_INSTRUMENT;
     DirectionV m_direction = DirectionV::AUTO;
     AutoOnOff m_centerBetweenStaves = AutoOnOff::AUTO;
 

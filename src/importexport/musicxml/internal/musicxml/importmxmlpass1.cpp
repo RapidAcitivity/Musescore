@@ -866,7 +866,7 @@ static void inferFromTitle(String& title, String& inferredSubtitle, String& infe
 
 static VBox* addCreditWords(Score* score, const CreditWordsList& crWords,
                             const int pageNr, const Size& pageSize,
-                            const bool top)
+                            const bool top, const bool isSibeliusScore)
 {
     VBox* vbox = nullptr;
 
@@ -889,7 +889,7 @@ static VBox* addCreditWords(Score* score, const CreditWordsList& crWords,
         // frame with the title on top of the page.
         // Sibelius (direct export) typically exports no header
         // and puts the title etc. in the footer
-        const bool doSwap = footerWords.size() > headerWords.size();
+        const bool doSwap = footerWords.size() > headerWords.size() && isSibeliusScore;
         if (top) {
             words = doSwap ? footerWords : headerWords;
         } else {
@@ -1011,7 +1011,7 @@ void MusicXMLParserPass1::createMeasuresAndVboxes(Score* score,
         // add a header vbox if the this measure is the first in the score or the first on a new page
         if (pageStartMeasureNrs.count(int(i)) || i == 0) {
             ++pageNr;
-            vbox = addCreditWords(score, crWords, pageNr, pageSize, true);
+            vbox = addCreditWords(score, crWords, pageNr, pageSize, true, m_exporterString.contains(u"sibelius"));
             if (i == 0 && vbox) {
                 vbox->setExcludeFromOtherParts(false);
             }
@@ -1037,7 +1037,7 @@ void MusicXMLParserPass1::createMeasuresAndVboxes(Score* score,
 
         // add a footer vbox if the next measure is on a new page or end of score has been reached
         if (pageStartMeasureNrs.count(int(i + 1)) || i == (ml.size() - 1)) {
-            addCreditWords(score, crWords, pageNr, pageSize, false);
+            addCreditWords(score, crWords, pageNr, pageSize, false, m_exporterString.contains(u"sibelius"));
         }
     }
 }
@@ -1635,7 +1635,8 @@ static void updateStyles(Score* score,
         // and text types used in the title frame
         // Some further tweaking may still be required.
 
-        if (tid == TextStyleType::LYRICS_ODD || tid == TextStyleType::LYRICS_EVEN) {
+        if (tid == TextStyleType::LYRICS_ODD || tid == TextStyleType::LYRICS_EVEN
+            || tid == TextStyleType::FRET_DIAGRAM_FINGERING || tid == TextStyleType::FRET_DIAGRAM_FRET_NUMBER) {
             continue;
         }
 
@@ -1819,7 +1820,7 @@ void MusicXMLParserPass1::defaults()
         } else if (m_e.name() == "staff-layout") {
             while (m_e.readNextStartElement()) {
                 if (m_e.name() == "staff-distance") {
-                    Spatium val(m_e.readText().toDouble() / 10.0);
+                    const Spatium val(m_e.readText().toDouble() / 10.0);
                     if (isImportLayout) {
                         m_score->style().set(Sid::staffDistance, val);
                     }
@@ -1916,13 +1917,13 @@ void MusicXMLParserPass1::setStyle(const String& type, const double val)
     } else if (type == u"wedge") {
         m_score->style().set(Sid::hairpinLineWidth, Spatium(val / 10));
     } else if (type == u"slur middle") {
-        m_score->style().set(Sid::SlurMidWidth, Spatium(val / 10));
+        m_score->style().set(Sid::slurMidWidth, Spatium(val / 10));
     } else if (type == u"slur tip") {
-        m_score->style().set(Sid::SlurEndWidth, Spatium(val / 10));
+        m_score->style().set(Sid::slurEndWidth, Spatium(val / 10));
     } else if (type == u"tie middle") {
-        m_score->style().set(Sid::TieMidWidth, Spatium(val / 10));
+        m_score->style().set(Sid::tieMidWidth, Spatium(val / 10));
     } else if (type == u"tie tip") {
-        m_score->style().set(Sid::TieEndWidth, Spatium(val / 10));
+        m_score->style().set(Sid::tieEndWidth, Spatium(val / 10));
     } else if ((type == u"cue")) {
         m_score->style().set(Sid::smallNoteMag, val / 100);
     } else if ((type == u"grace")) {

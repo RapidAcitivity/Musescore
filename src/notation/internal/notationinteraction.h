@@ -48,12 +48,12 @@ class QDrag;
 namespace mu::notation {
 class Notation;
 class NotationSelection;
-class NotationInteraction : public INotationInteraction, public muse::async::Asyncable
+class NotationInteraction : public INotationInteraction, public muse::Injectable, public muse::async::Asyncable
 {
-    INJECT(INotationConfiguration, configuration)
-    INJECT(ISelectInstrumentsScenario, selectInstrumentScenario)
-    INJECT(muse::IInteractive, interactive)
-    INJECT(engraving::rendering::ISingleRenderer, engravingRenderer)
+    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::Inject<ISelectInstrumentsScenario> selectInstrumentScenario = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<engraving::rendering::ISingleRenderer> engravingRenderer = { this };
 
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);
@@ -136,6 +136,8 @@ public:
     void moveChordRestToStaff(MoveDirection d) override;
     void moveLyrics(MoveDirection d) override;
     void swapChordRest(MoveDirection d) override;
+    void toggleSnapToPrevious() override;
+    void toggleSnapToNext() override;
 
     // Text edit
     bool isTextSelected() const override;
@@ -202,10 +204,11 @@ public:
 
     void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) override;
     bool transpose(const TransposeOptions& options) override;
-    void swapVoices(int voiceIndex1, int voiceIndex2) override;
+    void swapVoices(voice_idx_t voiceIndex1, voice_idx_t voiceIndex2) override;
     void addIntervalToSelectedNotes(int interval) override;
     void addFret(int fretIndex) override;
-    void changeSelectedNotesVoice(int voiceIndex) override;
+    void changeSelectedElementsVoice(voice_idx_t voiceIndex) override;
+    void changeSelectedElementsVoiceAssignment(VoiceAssignment voiceAssignment) override;
     void addAnchoredLineToSelectedNotes() override;
 
     void addTextToTopFrame(TextStyleType type) override;
@@ -276,6 +279,7 @@ public:
     void toggleSubScript() override;
     void toggleSuperScript() override;
     void toggleArticulation(mu::engraving::SymId) override;
+    void toggleOrnament(mu::engraving::SymId) override;
     void toggleAutoplace(bool) override;
 
     bool canInsertClef(mu::engraving::ClefType) const override;

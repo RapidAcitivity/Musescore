@@ -5392,153 +5392,6 @@
         <translation>Munsp.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3875"/>
-        <source>Drum Kit.</source>
-        <comment>drumset description</comment>
-        <extracomment>description for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trumset.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3877"/>
-        <source>Large Drum Kit</source>
-        <comment>drumset trackName</comment>
-        <extracomment>trackName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Stort trumset</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3879"/>
-        <source>Drum Kit</source>
-        <comment>drumset longName</comment>
-        <extracomment>longName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trumset</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3881"/>
-        <source>D. Kit</source>
-        <comment>drumset shortName</comment>
-        <extracomment>shortName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trs.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3884"/>
-        <source>4 piece drum kit.</source>
-        <comment>drum-kit-4 description</comment>
-        <extracomment>description for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trumset (4 trummor).</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3886"/>
-        <source>4-Piece Drum Kit</source>
-        <comment>drum-kit-4 trackName</comment>
-        <extracomment>trackName for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trumset (4 trummor)</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3888"/>
-        <source>Drum Kit</source>
-        <comment>drum-kit-4 longName</comment>
-        <extracomment>longName for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trumset</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3890"/>
-        <source>D. Kit</source>
-        <comment>drum-kit-4 shortName</comment>
-        <extracomment>shortName for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trs.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3893"/>
-        <source>5 piece drum kit.</source>
-        <comment>drum-kit-5 description</comment>
-        <extracomment>description for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trumset (5 trummor).</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3895"/>
-        <source>5-Piece Drum Kit</source>
-        <comment>drum-kit-5 trackName</comment>
-        <extracomment>trackName for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trumset (5 trummor)</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3897"/>
-        <source>Drum Kit</source>
-        <comment>drum-kit-5 longName</comment>
-        <extracomment>longName for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trumset</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3899"/>
-        <source>D. Kit</source>
-        <comment>drum-kit-5 shortName</comment>
-        <extracomment>shortName for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trs.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4001"/>
-        <source>China cymbal for drum kit.</source>
-        <comment>chinese-cymbal description</comment>
-        <extracomment>description for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kinacymbal för trumset.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4003"/>
-        <source>China Cymbal</source>
-        <comment>chinese-cymbal trackName</comment>
-        <extracomment>trackName for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kinacymbal</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4005"/>
-        <source>China Cymbal</source>
-        <comment>chinese-cymbal longName</comment>
-        <extracomment>longName for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kinacymbal</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4019"/>
-        <source>Suspended Cymbal.</source>
-        <comment>crash-cymbal description</comment>
-        <extracomment>description for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Hängande cymbal.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4021"/>
-        <source>Suspended Cymbal</source>
-        <comment>crash-cymbal trackName</comment>
-        <extracomment>trackName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Hängande cymbal</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4023"/>
-        <source>Suspended Cymbal</source>
-        <comment>crash-cymbal longName</comment>
-        <extracomment>longName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Hängande cymbal</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4025"/>
-        <source>Sus. Cym.</source>
-        <comment>crash-cymbal shortName</comment>
-        <extracomment>shortName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Hng. cym.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4028"/>
-        <source>Hand Cymbals.</source>
-        <comment>cymbal description</comment>
-        <extracomment>description for Hand Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Handcymbal.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4030"/>
-        <source>Hand Cymbals</source>
-        <comment>cymbal trackName</comment>
-        <extracomment>trackName for Hand Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Handcymbaler</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="442"/>
         <source>Fife</source>
         <comment>fife trackName</comment>
@@ -10019,13 +9872,6 @@
         <translation>Helicon</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3340"/>
-        <source>Helicon</source>
-        <comment>helicon shortName</comment>
-        <extracomment>shortName for Helicon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Hel.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="3343"/>
         <source>Conch shell, sometimes fitted with a mouthpiece.</source>
         <comment>conch description</comment>
@@ -10639,14 +10485,14 @@
         <source>Dulcimer</source>
         <comment>dulcimer trackName</comment>
         <extracomment>trackName for Dulcimer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Dulcimer</translation>
+        <translation>Hackbräde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3543"/>
         <source>Dulcimer</source>
         <comment>dulcimer longName</comment>
         <extracomment>longName for Dulcimer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Dulcimer</translation>
+        <translation>Hackbräde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3545"/>
@@ -11650,6 +11496,90 @@
         <translation>Cu.</translation>
     </message>
     <message>
+        <location filename="../instruments/instrumentsxml.h" line="3875"/>
+        <source>Drum Kit.</source>
+        <comment>drumset description</comment>
+        <extracomment>description for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trumset.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3877"/>
+        <source>Large Drum Kit</source>
+        <comment>drumset trackName</comment>
+        <extracomment>trackName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Stort trumset</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3879"/>
+        <source>Drum Kit</source>
+        <comment>drumset longName</comment>
+        <extracomment>longName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trumset</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3881"/>
+        <source>D. Kit</source>
+        <comment>drumset shortName</comment>
+        <extracomment>shortName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trs.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3884"/>
+        <source>4 piece drum kit.</source>
+        <comment>drum-kit-4 description</comment>
+        <extracomment>description for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trumset (4 trummor).</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3886"/>
+        <source>4-Piece Drum Kit</source>
+        <comment>drum-kit-4 trackName</comment>
+        <extracomment>trackName for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trumset (4 trummor)</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3888"/>
+        <source>Drum Kit</source>
+        <comment>drum-kit-4 longName</comment>
+        <extracomment>longName for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trumset</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3890"/>
+        <source>D. Kit</source>
+        <comment>drum-kit-4 shortName</comment>
+        <extracomment>shortName for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trs.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3893"/>
+        <source>5 piece drum kit.</source>
+        <comment>drum-kit-5 description</comment>
+        <extracomment>description for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trumset (5 trummor).</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3895"/>
+        <source>5-Piece Drum Kit</source>
+        <comment>drum-kit-5 trackName</comment>
+        <extracomment>trackName for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trumset (5 trummor)</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3897"/>
+        <source>Drum Kit</source>
+        <comment>drum-kit-5 longName</comment>
+        <extracomment>longName for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trumset</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3899"/>
+        <source>D. Kit</source>
+        <comment>drum-kit-5 shortName</comment>
+        <extracomment>shortName for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trs.</translation>
+    </message>
+    <message>
         <location filename="../instruments/instrumentsxml.h" line="3902"/>
         <source>Military field drum.</source>
         <comment>military-drum description</comment>
@@ -11991,6 +11921,48 @@
         <comment>cowbell shortName</comment>
         <extracomment>shortName for Cowbell; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Ksk.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4019"/>
+        <source>Suspended Cymbal.</source>
+        <comment>crash-cymbal description</comment>
+        <extracomment>description for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Hängande cymbal.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4021"/>
+        <source>Suspended Cymbal</source>
+        <comment>crash-cymbal trackName</comment>
+        <extracomment>trackName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Hängande cymbal</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4023"/>
+        <source>Suspended Cymbal</source>
+        <comment>crash-cymbal longName</comment>
+        <extracomment>longName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Hängande cymbal</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4025"/>
+        <source>Sus. Cym.</source>
+        <comment>crash-cymbal shortName</comment>
+        <extracomment>shortName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Hng. cym.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4028"/>
+        <source>Hand Cymbals.</source>
+        <comment>cymbal description</comment>
+        <extracomment>description for Hand Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Handcymbal.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4030"/>
+        <source>Hand Cymbals</source>
+        <comment>cymbal trackName</comment>
+        <extracomment>trackName for Hand Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Handcymbaler</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4034"/>
@@ -15385,7 +15357,7 @@
         <source>Very large mountain or Appalachian dulcimer, an octave lower than the regular dulcimer. (Tablature).</source>
         <comment>mtn-dulcimer-bass-chrom-tab description</comment>
         <extracomment>description for Mtn. Dulcimer - Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Väldigt stort bergs- eller appalachiskt hackbräde, en oktav lägre än ett vanligt hackbräde. (Tabulatur.)</translation>
+        <translation>Mycket stor bergs- eller appalachisk dulcimer, en oktav lägre än en vanlig dulcimer. (Tabulatur.)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6171"/>
@@ -15451,6 +15423,13 @@
         <translation>*B</translation>
     </message>
     <message>
+        <location filename="../instruments/instrumentsxml.h" line="3340"/>
+        <source>Hel.</source>
+        <comment>helicon shortName</comment>
+        <extracomment>shortName for Helicon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Hel.</translation>
+    </message>
+    <message>
         <location filename="../instruments/instrumentsxml.h" line="3832"/>
         <source>Bass Drum</source>
         <comment>bass-drum trackName</comment>
@@ -15463,6 +15442,27 @@
         <comment>snare-drum trackName</comment>
         <extracomment>trackName for Snare Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Virveltrumma</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4001"/>
+        <source>China cymbal for drum kit.</source>
+        <comment>chinese-cymbal description</comment>
+        <extracomment>description for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Kinacymbal för trumset.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4003"/>
+        <source>China Cymbal</source>
+        <comment>chinese-cymbal trackName</comment>
+        <extracomment>trackName for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Kinacymbal</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4005"/>
+        <source>China Cymbal</source>
+        <comment>chinese-cymbal longName</comment>
+        <extracomment>longName for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Kinacymbal</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4032"/>
@@ -16834,21 +16834,21 @@
         <source>Also known as the Appalachian dulcimer, among other names. A fretted string instrument of the zither family. (Staff notation).</source>
         <comment>mtn-dulcimer-std description</comment>
         <extracomment>description for Mtn. Dulcimer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Även känt som appalachiskt hackbräde, bland många namn. Ett stränginstrument med band, medlem i cittrafamiljen. (Notsystem).</translation>
+        <translation>Även känd som appalachisk dulcimer, bland många namn. Ett stränginstrument med band, medlem i cittrafamiljen. (Notsystem).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5568"/>
         <source>Mtn. Dulcimer</source>
         <comment>mtn-dulcimer-std trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer</translation>
+        <translation>Bergsdulcimer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5570"/>
         <source>Mtn. Dulcimer</source>
         <comment>mtn-dulcimer-std longName</comment>
         <extracomment>longName for Mtn. Dulcimer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer</translation>
+        <translation>Bergsdulcimer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5572"/>
@@ -16862,42 +16862,42 @@
         <source>Also known as the Appalachian dulcimer, among other names. A fretted string instrument of the zither family. (Tablature).</source>
         <comment>mtn-dulcimer-std-chrom-tab description</comment>
         <extracomment>description for Mtn. Dulcimer (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Även känt som appalachiskt hackbräde, bland många namn. Ett stränginstrument med band, medlem i cittrafamiljen. (Tabulatur.)</translation>
+        <translation>Även känd som appalachisk dulcimer, bland många namn. Ett stränginstrument med band, medlem i cittrafamiljen. (Tabulatur.)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5577"/>
         <source>Mtn. Dulcimer (tablature)</source>
         <comment>mtn-dulcimer-std-chrom-tab trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bergshackbräde (tabulatur)</translation>
+        <translation>Bergsdulcimer (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5579"/>
         <source>Mtn. Dulcimer</source>
         <comment>mtn-dulcimer-std-chrom-tab longName</comment>
         <extracomment>longName for Mtn. Dulcimer (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer</translation>
+        <translation>Bergsdulcimer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5582"/>
         <source>Larger version of the mountain or Appalachian dulcimer. (Staff notation).</source>
         <comment>mtn-dulcimer-baritone description</comment>
         <extracomment>description for Mtn. Dulcimer - Baritone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Större variant av bergs- eller appalachiskt hackbräde. (Notsystem).</translation>
+        <translation>Större variant av bergs- eller appalachisk dulcimer. (Notsystem).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5584"/>
         <source>Mtn. Dulcimer - Baritone</source>
         <comment>mtn-dulcimer-baritone trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer - Baritone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - Baryton</translation>
+        <translation>Bergsdulcimer - Baryton</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5586"/>
         <source>Mtn. Dulcimer - Baritone</source>
         <comment>mtn-dulcimer-baritone longName</comment>
         <extracomment>longName for Mtn. Dulcimer - Baritone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - Baryton</translation>
+        <translation>Bergsdulcimer - Baryton</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5588"/>
@@ -16911,42 +16911,42 @@
         <source>Larger version of the mountain or Appalachian dulcimer. (Tablature).</source>
         <comment>mtn-dulcimer-bartn-chrom-tab description</comment>
         <extracomment>description for Mtn. Dulcimer - Baritone (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Större variant av bergs- eller appalachiskt hackbräde. (Tabulatur.)</translation>
+        <translation>Större variant av bergs- eller appalachisk dulcimer. (Tabulatur.)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5593"/>
         <source>Mtn. Dulcimer - Baritone (tablature)</source>
         <comment>mtn-dulcimer-bartn-chrom-tab trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer - Baritone (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bergshackbräde - baryton (tabulatur)</translation>
+        <translation>Bergsdulcimer - baryton (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5595"/>
         <source>Mtn. Dulcimer - Baritone</source>
         <comment>mtn-dulcimer-bartn-chrom-tab longName</comment>
         <extracomment>longName for Mtn. Dulcimer - Baritone (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - Baryton</translation>
+        <translation>Bergsdulcimer - Baryton</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5598"/>
         <source>Very large mountain or Appalachian dulcimer, an octave lower than the regular dulcimer. (Staff notation).</source>
         <comment>mtn-dulcimer-bass description</comment>
         <extracomment>description for Mtn. Dulcimer - Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Väldigt stort bergs- eller appalachiskt hackbräde, en oktav lägre än ett vanligt hackbräde. (Notsystem).</translation>
+        <translation>Mycket stor bergs- eller appalachisk dulcimer, en oktav lägre än en vanlig dulcimer. (Notsystem).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5600"/>
         <source>Mtn. Dulcimer - Bass</source>
         <comment>mtn-dulcimer-bass trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer - Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - Bas</translation>
+        <translation>Bergsdulcimer - Bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5602"/>
         <source>Mtn. Dulcimer - Bass</source>
         <comment>mtn-dulcimer-bass longName</comment>
         <extracomment>longName for Mtn. Dulcimer - Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - Bas</translation>
+        <translation>Bergsdulcimer - Bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5604"/>
@@ -16960,14 +16960,14 @@
         <source>Mtn. Dulcimer - Bass (tablature)</source>
         <comment>mtn-dulcimer-bass-chrom-tab trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer - Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bergshackbräde - bas (tabulatur)</translation>
+        <translation>Bergsdulcimer - bas (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5611"/>
         <source>Mtn. Dulcimer - Bass</source>
         <comment>mtn-dulcimer-bass-chrom-tab longName</comment>
         <extracomment>longName for Mtn. Dulcimer - Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - Bas</translation>
+        <translation>Bergsdulcimer - Bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5614"/>
@@ -19447,7 +19447,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="182"/>
         <source>Mtn. Dulcimers</source>
-        <translation>Mtn. Dulcimers</translation>
+        <translation>Bergsdulcimer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="183"/>
@@ -19655,7 +19655,7 @@
     <name>engraving/scoreorder</name>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6248"/>
-        <source>Orchestral</source>
+        <source>Orchestra</source>
         <translation>Orkester</translation>
     </message>
     <message>

@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DRAW_IFONTFACE_H
-#define MUSE_DRAW_IFONTFACE_H
+#pragma once
 
 #ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
 #include <msdfgen.h>
@@ -57,6 +56,7 @@ public:
     virtual f26dot6_t ascent() const = 0;
     virtual f26dot6_t descent() const = 0;
     virtual f26dot6_t xHeight() const = 0;
+    virtual f26dot6_t capHeight() const = 0;
 
     virtual std::vector<GlyphPos> glyphs(const char32_t* text, int text_length) const = 0;
     virtual glyph_idx_t glyphIndex(char32_t ucs4) const = 0;
@@ -137,5 +137,3 @@ inline bool operator==(const msdfgen::Shape& s1, const msdfgen::Shape& s2)
 }
 
 #endif
-
-#endif // MUSE_DRAW_IFONTFACE_H

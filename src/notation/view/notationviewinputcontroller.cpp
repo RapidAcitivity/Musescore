@@ -56,8 +56,8 @@ static bool seekAllowed(const mu::engraving::EngravingItem* element)
     return muse::contains(playableTypes, element->type());
 }
 
-NotationViewInputController::NotationViewInputController(IControlledView* view)
-    : m_view(view)
+NotationViewInputController::NotationViewInputController(IControlledView* view, const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_view(view)
 {
 }
 
@@ -719,7 +719,11 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
 
     if (!selection->isRange()) {
         if (ctx.hitElement && ctx.hitElement->needStartEditingAfterSelecting()) {
-            viewInteraction()->startEditElement(ctx.hitElement, false);
+            if (ctx.hitElement->hasGrips()) {
+                viewInteraction()->startEditGrip(ctx.hitElement, ctx.hitElement->gripsCount() > 4 ? Grip::DRAG : Grip::MIDDLE);
+            } else {
+                viewInteraction()->startEditElement(ctx.hitElement, false);
+            }
             return;
         }
     }

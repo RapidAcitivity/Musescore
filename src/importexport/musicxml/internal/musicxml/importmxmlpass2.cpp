@@ -934,9 +934,10 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const String& pl
     if (!measure) {
         return;
     }
+    Fraction elTick = tick;
 
     if (!placement.empty()) {
-        if (el->hasVoiceApplicationProperties()) {
+        if (el->hasVoiceAssignmentProperties()) {
             el->setProperty(Pid::DIRECTION, placement == u"above" ? DirectionV::UP : DirectionV::DOWN);
             el->setPropertyFlags(Pid::DIRECTION, PropertyFlags::UNSTYLED);
         } else {
@@ -944,9 +945,13 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const String& pl
             el->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
         }
     }
+    const Fraction& endTick = measure->score()->endTick();
+    if (elTick > endTick) {
+        elTick = endTick;
+    }
 
     el->setTrack(el->isTempoText() ? 0 : track);      // TempoText must be in track 0
-    Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
+    Segment* s = measure->getSegment(SegmentType::ChordRest, elTick);
     if (el->systemFlag()) {
         Score* score = measure->score();
         Staff* st = score->staff(track2staff(track));
@@ -954,7 +959,7 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const String& pl
             score->addSystemObjectStaff(st);
         }
         bool found = false;
-        for (EngravingItem* existingEl : muse::values(_pass2.systemElements(), tick.ticks())) {
+        for (EngravingItem* existingEl : muse::values(_pass2.systemElements(), elTick.ticks())) {
             if (el->type() == existingEl->type()) {
                 found = true;
                 break;
@@ -962,7 +967,7 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const String& pl
         }
         if (!found) {
             el->setParent(s);
-            _pass2.addSystemElement(el, tick);
+            _pass2.addSystemElement(el, elTick);
         }
     } else {
         s->add(el);
@@ -1057,6 +1062,11 @@ static void handleTupletStop(Tuplet*& tuplet, const int normalNotes)
     tuplet->setBaseLen(td);
     Fraction f(normalNotes, td.fraction().denominator());
     f.reduce();
+    if (!f.isValid()) {
+        LOGD("MusicXML::import: tuplet stop but note values too small");
+        tuplet = nullptr;
+        return;
+    }
     tuplet->setTicks(f);
     // TODO determine usefulness of following check
     int totalDuration = 0;
@@ -1272,33 +1282,34 @@ static void addOtherOrnamentToChord(const Notation& notation, ChordRest* cr)
 
 static bool convertArticulationToSymId(const String& mxmlName, SymId& id)
 {
-    static std::map<String, SymId> map;         // map MusicXML articulation name to MuseScore symbol
-    if (map.empty()) {
-        map[u"accent"]           = SymId::articAccentAbove;
-        map[u"staccatissimo"]    = SymId::articStaccatissimoWedgeAbove;
-        map[u"staccato"]         = SymId::articStaccatoAbove;
-        map[u"tenuto"]           = SymId::articTenutoAbove;
-        map[u"strong-accent"]    = SymId::articMarcatoAbove;
-        map[u"delayed-turn"]     = SymId::ornamentTurn;
-        map[u"turn"]             = SymId::ornamentTurn;
-        map[u"inverted-turn"]    = SymId::ornamentTurnInverted;
-        map[u"stopped"]          = SymId::brassMuteClosed;
-        map[u"up-bow"]           = SymId::stringsUpBow;
-        map[u"down-bow"]         = SymId::stringsDownBow;
-        map[u"detached-legato"]  = SymId::articTenutoStaccatoAbove;
-        map[u"spiccato"]         = SymId::articStaccatissimoAbove;
-        map[u"snap-pizzicato"]   = SymId::pluckedSnapPizzicatoAbove;
-        map[u"schleifer"]        = SymId::ornamentPrecompSlide;
-        map[u"open"]             = SymId::brassMuteOpen;
-        map[u"open-string"]      = SymId::brassMuteOpen;
-        map[u"thumb-position"]   = SymId::stringsThumbPosition;
-        map[u"soft-accent"]      = SymId::articSoftAccentAbove;
-        map[u"stress"]           = SymId::articStressAbove;
-        map[u"unstress"]         = SymId::articUnstressAbove;
-    }
+    // map MusicXML articulation name to MuseScore symbol
+    static const std::map<String, SymId> map {
+        { u"accent",          SymId::articAccentAbove },
+        { u"staccatissimo",   SymId::articStaccatissimoWedgeAbove },
+        { u"staccato",        SymId::articStaccatoAbove },
+        { u"tenuto",          SymId::articTenutoAbove },
+        { u"strong-accent",   SymId::articMarcatoAbove },
+        { u"delayed-turn",    SymId::ornamentTurn },
+        { u"turn",            SymId::ornamentTurn },
+        { u"inverted-turn",   SymId::ornamentTurnInverted },
+        { u"stopped",         SymId::brassMuteClosed },
+        { u"up-bow",          SymId::stringsUpBow },
+        { u"down-bow",        SymId::stringsDownBow },
+        { u"detached-legato", SymId::articTenutoStaccatoAbove },
+        { u"spiccato",        SymId::articStaccatissimoAbove },
+        { u"snap-pizzicato",  SymId::pluckedSnapPizzicatoAbove },
+        { u"schleifer",       SymId::ornamentPrecompSlide },
+        { u"open",            SymId::brassMuteOpen },
+        { u"open-string",     SymId::brassMuteOpen },
+        { u"thumb-position",  SymId::stringsThumbPosition },
+        { u"soft-accent",     SymId::articSoftAccentAbove },
+        { u"stress",          SymId::articStressAbove },
+        { u"unstress",        SymId::articUnstressAbove }
+    };
 
-    if (muse::contains(map, mxmlName)) {
-        id = map.at(mxmlName);
+    auto it = map.find(mxmlName);
+    if (it != map.end()) {
+        id = it->second;
         return true;
     } else {
         id = SymId::noSym;
@@ -1316,21 +1327,23 @@ static bool convertArticulationToSymId(const String& mxmlName, SymId& id)
 
 static SymId convertFermataToSymId(const String& mxmlName)
 {
-    static std::map<String, SymId> map; // map MusicXML fermata name to MuseScore symbol
-    if (map.empty()) {
-        map[u"normal"]           = SymId::fermataAbove;
-        map[u"angled"]           = SymId::fermataShortAbove;
-        map[u"square"]           = SymId::fermataLongAbove;
-        map[u"double-angled"]    = SymId::fermataVeryShortAbove;
-        map[u"double-square"]    = SymId::fermataVeryLongAbove;
-        map[u"double-dot"]       = SymId::fermataLongHenzeAbove;
-        map[u"half-curve"]       = SymId::fermataShortHenzeAbove;
-        map[u"curlew"]           = SymId::curlewSign;
+    // map MusicXML fermata name to MuseScore symbol
+    static const std::map<String, SymId> map {
+        { u"normal",        SymId::fermataAbove },
+        { u"angled",        SymId::fermataShortAbove },
+        { u"square",        SymId::fermataLongAbove },
+        { u"double-angled", SymId::fermataVeryShortAbove },
+        { u"double-square", SymId::fermataVeryLongAbove },
+        { u"double-dot",    SymId::fermataLongHenzeAbove },
+        { u"half-curve",    SymId::fermataShortHenzeAbove },
+        { u"curlew",        SymId::curlewSign },
+    };
+
+    auto it = map.find(mxmlName);
+    if (it != map.end()) {
+        return it->second;
     }
 
-    if (muse::contains(map, mxmlName)) {
-        return map.at(mxmlName);
-    }
     return SymId::fermataAbove;
 }
 
@@ -1344,33 +1357,35 @@ static SymId convertFermataToSymId(const String& mxmlName)
 
 static NoteHeadGroup convertNotehead(String mxmlName)
 {
-    static std::map<String, int> map;   // map MusicXML notehead name to a MuseScore headgroup
-    if (map.empty()) {
-        map[u"slash"] = int(NoteHeadGroup::HEAD_SLASH);
-        map[u"triangle"] = int(NoteHeadGroup::HEAD_TRIANGLE_UP);
-        map[u"diamond"] = int(NoteHeadGroup::HEAD_DIAMOND);
-        map[u"cross"] = int(NoteHeadGroup::HEAD_PLUS);
-        map[u"x"] = int(NoteHeadGroup::HEAD_CROSS);
-        map[u"circle-x"] = int(NoteHeadGroup::HEAD_XCIRCLE);
-        map[u"inverted triangle"] = int(NoteHeadGroup::HEAD_TRIANGLE_DOWN);
-        map[u"slashed"] = int(NoteHeadGroup::HEAD_SLASHED1);
-        map[u"back slashed"] = int(NoteHeadGroup::HEAD_SLASHED2);
-        map[u"normal"] = int(NoteHeadGroup::HEAD_NORMAL);
-        map[u"do"] = int(NoteHeadGroup::HEAD_DO);
-        map[u"re"] = int(NoteHeadGroup::HEAD_RE);
-        map[u"mi"] = int(NoteHeadGroup::HEAD_MI);
-        map[u"fa"] = int(NoteHeadGroup::HEAD_FA);
-        map[u"fa up"] = int(NoteHeadGroup::HEAD_FA);
-        map[u"so"] = int(NoteHeadGroup::HEAD_SOL);
-        map[u"la"] = int(NoteHeadGroup::HEAD_LA);
-        map[u"ti"] = int(NoteHeadGroup::HEAD_TI);
-    }
+    // map MusicXML notehead name to a MuseScore headgroup
+    static const std::map<String, NoteHeadGroup> map {
+        { u"slash", NoteHeadGroup::HEAD_SLASH },
+        { u"triangle", NoteHeadGroup::HEAD_TRIANGLE_UP },
+        { u"diamond", NoteHeadGroup::HEAD_DIAMOND },
+        { u"cross", NoteHeadGroup::HEAD_PLUS },
+        { u"x", NoteHeadGroup::HEAD_CROSS },
+        { u"circle-x", NoteHeadGroup::HEAD_XCIRCLE },
+        { u"inverted triangle", NoteHeadGroup::HEAD_TRIANGLE_DOWN },
+        { u"slashed", NoteHeadGroup::HEAD_SLASHED1 },
+        { u"back slashed", NoteHeadGroup::HEAD_SLASHED2 },
+        { u"normal", NoteHeadGroup::HEAD_NORMAL },
+        { u"do", NoteHeadGroup::HEAD_DO },
+        { u"re", NoteHeadGroup::HEAD_RE },
+        { u"mi", NoteHeadGroup::HEAD_MI },
+        { u"fa", NoteHeadGroup::HEAD_FA },
+        { u"fa up", NoteHeadGroup::HEAD_FA },
+        { u"so", NoteHeadGroup::HEAD_SOL },
+        { u"la", NoteHeadGroup::HEAD_LA },
+        { u"ti", NoteHeadGroup::HEAD_TI }
+    };
 
-    if (muse::contains(map, mxmlName)) {
-        return NoteHeadGroup(map.at(mxmlName));
+    auto it = map.find(mxmlName);
+    if (it != map.end()) {
+        return it->second;
     } else {
         LOGD("unknown notehead %s", muPrintable(mxmlName));      // TODO
     }
+
     // default: return 0
     return NoteHeadGroup::HEAD_NORMAL;
 }
@@ -1436,7 +1451,7 @@ static void addTextToNote(int l, int c, String txt, String placement, String fon
 static void setSLinePlacement(SLine* sli, const String& placement)
 {
     if (placement == u"above" || placement == u"below") {
-        if (sli->hasVoiceApplicationProperties()) {
+        if (sli->hasVoiceAssignmentProperties()) {
             sli->setProperty(Pid::DIRECTION, placement == u"above" ? DirectionV::UP : DirectionV::DOWN);
             sli->setPropertyFlags(Pid::DIRECTION, PropertyFlags::UNSTYLED);
         } else {
@@ -1941,7 +1956,8 @@ void MusicXMLParserPass2::scorePartwise()
             continue;
         }
         const String sysElText = sysEl->isTextBase() ? toTextBase(sysEl)->plainText() : toTextLineBase(sysEl)->beginText();
-        for (EngravingItem* existingEl : seg->annotations()) {
+        std::vector<EngravingItem*> annotations = seg->annotations();
+        for (EngravingItem* existingEl : annotations) {
             const bool bothText = (existingEl->isTextBase() || existingEl->isTextLineBase()) && elIsText;
             if (existingEl && existingEl != sysEl && bothText) {
                 const String existingText
@@ -2622,7 +2638,24 @@ void MusicXMLParserPass2::measure(const String& partId, const Fraction time)
         } else if (m_e.name() == "barline") {
             barline(partId, measure, time + mTime);
         } else if (m_e.name() == "print") {
-            m_e.skipCurrentElement();
+            if (m_score->parts()[0] == m_pass1.getPart(partId)) {
+                // only process for first part
+                while (m_e.readNextStartElement()) {
+                    if (m_e.name() == "page-layout") {
+                        m_e.skipCurrentElement();            // skip but don't log
+                    } else if (m_e.name() == "system-layout") {
+                        m_e.skipCurrentElement();            // skip but don't log
+                    } else if (m_e.name() == "staff-layout") {
+                        m_e.skipCurrentElement();            // skip but don't log
+                    } else if (m_e.name() == "measure-layout") {
+                        measureLayout(measure);
+                    } else {
+                        skipLogCurrElem();
+                    }
+                }
+            } else {
+                m_e.skipCurrentElement();
+            }
         } else {
             skipLogCurrElem();
         }
@@ -2762,6 +2795,25 @@ void MusicXMLParserPass2::setMeasureRepeats(const staff_idx_t scoreRelStaff, Mea
             m_measureRepeatCount[i] = 0;
         }
         measure->setMeasureRepeatCount(m_measureRepeatCount[i], staffIdx);
+    }
+}
+
+//---------------------------------------------------------
+//   measureLayout
+//---------------------------------------------------------
+
+void MusicXMLParserPass2::measureLayout(Measure* measure)
+{
+    while (m_e.readNextStartElement()) {
+        if (m_e.name() == "measure-distance") {
+            const Spatium val(m_e.readText().toDouble() / 10.0);
+            if (!measure->prev()->isHBox()) {
+                MeasureBase* gap = m_score->insertBox(ElementType::HBOX, measure);
+                toHBox(gap)->setBoxWidth(val);
+            }
+        } else {
+            skipLogCurrElem();
+        }
     }
 }
 
@@ -3265,7 +3317,7 @@ void MusicXMLParserDirection::direction(const String& partId,
                 String rawWordsText = m_wordsText;
                 static const std::regex re("(<.*?>)");
                 rawWordsText.remove(re);
-                String sep = !m_metroText.empty() && !m_wordsText.empty() && rawWordsText.back() != ' ' ? u" " : String();
+                String sep = !m_metroText.empty() && !rawWordsText.empty() && rawWordsText.back() != ' ' ? u" " : String();
                 t->setXmlText(m_wordsText + sep + m_metroText);
                 ((TempoText*)t)->setTempo(m_tpoSound);
                 if (t->plainText().contains('=')) {
@@ -6330,7 +6382,7 @@ void MusicXMLParserPass2::xmlSetDrumsetPitch(Note* note, const Chord* chord, con
 
             newPitch = instr.pitch;
             ds->drum(newPitch) = ds->drum(newPitch) = DrumInstrument(
-                instr.name.toStdString().c_str(), headGroup, line, stemDir, chord->voice());
+                instr.name.toStdString().c_str(), headGroup, line, stemDir, static_cast<int>(chord->voice()));
         }
     }
 
@@ -6345,7 +6397,7 @@ void MusicXMLParserPass2::xmlSetDrumsetPitch(Note* note, const Chord* chord, con
             }
         }
 
-        ds->drum(newPitch) = DrumInstrument("drum", headGroup, line, stemDir, chord->voice());
+        ds->drum(newPitch) = DrumInstrument("drum", headGroup, line, stemDir, static_cast<int>(chord->voice()));
     } else if (stemDir == DirectionV::AUTO) {
         stemDir = ds->stemDirection(newPitch);
     }

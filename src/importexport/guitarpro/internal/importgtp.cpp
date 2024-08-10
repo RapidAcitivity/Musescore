@@ -27,7 +27,6 @@
 #include "importptb.h"
 
 #include "realfn.h"
-#include "translation.h"
 
 #include "engraving/types/typesconv.h"
 #include "engraving/types/symid.h"
@@ -48,20 +47,16 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/fret.h"
 #include "engraving/dom/glissando.h"
-#include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/keysig.h"
-#include "engraving/dom/letring.h"
 #include "engraving/dom/lyrics.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/measurebase.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/notedot.h"
-#include "engraving/dom/ottava.h"
-#include "engraving/dom/palmmute.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/rehearsalmark.h"
 #include "engraving/dom/rest.h"
@@ -78,9 +73,7 @@
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
-#include "engraving/dom/tremolobar.h"
 #include "engraving/dom/volta.h"
-#include "engraving/dom/vibrato.h"
 
 #include "log.h"
 
@@ -959,7 +952,7 @@ void GuitarPro::createBend(Note* note, std::vector<PitchValue>& bendData)
         return;
     }
 
-    bool useStretchedBends = engravingConfiguration()->guitarProImportExperimental();
+    bool useStretchedBends = engravingConfiguration()->useStretchedBends();
 
     if (useStretchedBends) {
         Chord* chord = toChord(note->parent());
@@ -1371,6 +1364,10 @@ bool GuitarPro1::read(IODevice* io)
         int tuning[GP_MAX_STRING_NUMBER];
 
         int strings  = version > 101 ? readInt() : 6;
+        if (strings <= 0 || strings > GP_MAX_STRING_NUMBER) {
+            return false;
+        }
+
         for (int j = 0; j < strings; ++j) {
             tuning[j] = readInt();
         }

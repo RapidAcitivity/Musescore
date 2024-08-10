@@ -97,6 +97,8 @@ public:
     MOCK_METHOD(void, nudge, (MoveDirection, bool), (override));
     MOCK_METHOD(void, moveChordRestToStaff, (MoveDirection), (override));
     MOCK_METHOD(void, swapChordRest, (MoveDirection), (override));
+    MOCK_METHOD(void, toggleSnapToPrevious, (), (override));
+    MOCK_METHOD(void, toggleSnapToNext, (), (override));
 
     MOCK_METHOD(bool, isTextSelected, (), (const, override));
     MOCK_METHOD(bool, isTextEditingStarted, (), (const, override));
@@ -161,10 +163,11 @@ public:
 
     MOCK_METHOD(void, setBreaksSpawnInterval, (BreaksSpawnIntervalType, int), (override));
     MOCK_METHOD(bool, transpose, (const TransposeOptions&), (override));
-    MOCK_METHOD(void, swapVoices, (int, int), (override));
+    MOCK_METHOD(void, swapVoices, (voice_idx_t, voice_idx_t), (override));
     MOCK_METHOD(void, addIntervalToSelectedNotes, (int), (override));
     MOCK_METHOD(void, addFret, (int), (override));
-    MOCK_METHOD(void, changeSelectedNotesVoice, (int), (override));
+    MOCK_METHOD(void, changeSelectedElementsVoice, (voice_idx_t), (override));
+    MOCK_METHOD(void, changeSelectedElementsVoiceAssignment, (VoiceAssignment), (override));
     MOCK_METHOD(void, addAnchoredLineToSelectedNotes, (), (override));
 
     MOCK_METHOD(void, addTextToTopFrame, (TextStyleType), (override));
@@ -239,6 +242,7 @@ public:
     MOCK_METHOD(void, insertClef, (mu::engraving::ClefType), (override));
 
     MOCK_METHOD(void, toggleArticulation, (mu::engraving::SymId), (override));
+    MOCK_METHOD(void, toggleOrnament, (mu::engraving::SymId), (override));
     MOCK_METHOD(void, changeAccidental, (mu::engraving::AccidentalType), (override));
     MOCK_METHOD(void, transposeSemitone, (int), (override));
     MOCK_METHOD(void, transposeDiatonicAlterations, (mu::engraving::TransposeDirection), (override));

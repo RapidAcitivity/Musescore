@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DRAW_FONTFACEFT_H
-#define MUSE_DRAW_FONTFACEFT_H
+#pragma once
 
 #include "ifontface.h"
 
@@ -44,6 +43,7 @@ public:
     f26dot6_t ascent() const override;
     f26dot6_t descent() const override;
     f26dot6_t xHeight() const override;
+    f26dot6_t capHeight() const override;
 
     std::vector<GlyphPos> glyphs(const char32_t* text, int text_length) const override;
     glyph_idx_t glyphIndex(char32_t ucs4) const override;
@@ -70,5 +70,3 @@ private:
 #endif
 };
 }
-
-#endif // MUSE_DRAW_FONTFACEFT_H

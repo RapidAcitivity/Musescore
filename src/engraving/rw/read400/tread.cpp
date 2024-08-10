@@ -322,7 +322,7 @@ void TRead::readProperty(EngravingItem* item, XmlReader& xml, ReadContext& ctx, 
     }
 
     // Pre-4.4 compatibility: these items now use DIRECTION property
-    if (pid == Pid::PLACEMENT && item->hasVoiceApplicationProperties()) {
+    if (pid == Pid::PLACEMENT && item->hasVoiceAssignmentProperties()) {
         pid = Pid::DIRECTION;
         v = v.value<PlacementV>() == PlacementV::ABOVE ? PropertyValue(DirectionV::UP) : PropertyValue(DirectionV::DOWN);
     }
@@ -592,7 +592,7 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
         } else if (tag == "velocity") {
             d->setVelocity(e.readInt());
         } else if (tag == "dynType") {
-            d->setDynRange(TConv::fromXml(e.readAsciiText(), DynamicRange::STAFF));
+            d->setDynRange(TConv::fromXml(e.readAsciiText(), DynamicRange::PART));
         } else if (tag == "veloChange") {
             d->setChangeInVelocity(e.readInt());
         } else if (tag == "veloChangeSpeed") {
@@ -799,13 +799,7 @@ void TRead::read(Instrument* item, XmlReader& e, ReadContext& ctx, Part* part)
         }
     }
 
-    if (item->musicXmlId().isEmpty()) {
-        item->setMusicXmlId(item->recognizeMusicXmlId());
-    }
-
-    if (item->id().isEmpty()) {
-        item->setId(item->recognizeId());
-    }
+    item->updateInstrumentId();
 
     if (item->channel(0) && item->channel(0)->program() == -1) {
         item->channel(0)->setProgram(item->recognizeMidiProgram());
@@ -2692,8 +2686,6 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
             g->setEaseIn(e.readInt());
         } else if (tag == "easeOutSpin") {
             g->setEaseOut(e.readInt());
-        } else if (tag == "play") {
-            g->setPlayGlissando(e.readBool());
         } else if (TRead::readStyledProperty(g, tag, e, ctx)) {
         } else if (!TRead::readProperties(static_cast<SLine*>(g), e, ctx)) {
             e.unknown();
@@ -2759,7 +2751,7 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
         } else if (tag == "veloChange") {
             h->setVeloChange(e.readInt());
         } else if (tag == "dynType") {
-            h->setDynRange(TConv::fromXml(e.readAsciiText(), DynamicRange::STAFF));
+            h->setDynRange(TConv::fromXml(e.readAsciiText(), DynamicRange::PART));
         } else if (tag == "useTextLine") {        // obsolete
             e.readInt();
             if (h->hairpinType() == HairpinType::CRESC_HAIRPIN) {
@@ -3013,7 +3005,6 @@ bool TRead::readProperties(Lyrics* l, XmlReader& e, ReadContext& ctx)
     if (tag == "no") {
         l->setNo(e.readInt());
         if (l->isEven()) {
-            l->setEven(true);
             l->initTextStyleType(TextStyleType::LYRICS_EVEN);
         }
     } else if (tag == "syllabic") {
@@ -3134,7 +3125,17 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
     } else if (tag == "head") {
         TRead::readProperty(n, e, ctx, Pid::HEAD_GROUP);
     } else if (tag == "velocity") {
-        n->setUserVelocity(e.readInt());
+        if (n->score()->mscVersion() >= 400) {
+            n->setUserVelocity(e.readInt());
+        } else {
+            // TODO: convert pre-MU4 velocity values to MU4
+            // but doing so is non-trivial,
+            // since MU3 "offset" is based on a percentage of the current dynamic (which is not known at this time)
+            // and MU4 "user" is not raw MIDI velocity like MU3 is
+            // so until a new velocity system is designed for MU4 (or another solution is found),
+            // the best we can do is ignore pre-MU4 velocity values
+            e.skipCurrentElement();
+        }
     } else if (tag == "play") {
         n->setPlay(e.readInt());
     } else if (tag == "tuning") {
@@ -3609,13 +3610,16 @@ void TRead::read(SlurTieSegment* s, XmlReader& e, ReadContext& ctx)
 bool TRead::readProperties(Spanner* s, XmlReader& e, ReadContext& ctx)
 {
     const AsciiStringView tag(e.name());
-    if (ctx.pasteMode()) {
-        if (tag == "ticks_f") {
-            s->setTicks(e.readFraction());
-            return true;
-        }
+    if (ctx.pasteMode() && (tag == "ticks_f")) {
+        s->setTicks(e.readFraction());
+        return true;
+    } else if (tag == "play") {
+        s->setPlaySpanner(e.readBool());
+        return true;
+    } else if (!readItemProperties(s, e, ctx)) {
+        return false;
     }
-    return readItemProperties(s, e, ctx);
+    return true;
 }
 
 void TRead::read(Spacer* s, XmlReader& e, ReadContext& ctx)
@@ -4314,8 +4318,6 @@ void TRead::read(Trill* t, XmlReader& e, ReadContext& ctx)
             }
         } else if (tag == "ornamentStyle") {
             readProperty(t, e, ctx, Pid::ORNAMENT_STYLE);
-        } else if (tag == "play") {
-            t->setPlayArticulation(e.readBool());
         } else if (!readProperties(static_cast<SLine*>(t), e, ctx)) {
             e.unknown();
         }
@@ -4330,8 +4332,6 @@ void TRead::read(Vibrato* v, XmlReader& e, ReadContext& ctx)
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
             v->setVibratoType(TConv::fromXml(e.readAsciiText(), VibratoType::GUITAR_VIBRATO));
-        } else if (tag == "play") {
-            v->setPlayArticulation(e.readBool());
         } else if (!readProperties(static_cast<SLine*>(v), e, ctx)) {
             e.unknown();
         }

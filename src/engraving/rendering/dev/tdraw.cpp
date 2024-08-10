@@ -480,7 +480,7 @@ void TDraw::draw(const Arpeggio* item, Painter* painter)
 
     const double y1 = ldata->bbox().top();
     const double y2 = ldata->bbox().bottom();
-    const double lineWidth = item->style().styleMM(Sid::ArpeggioLineWidth);
+    const double lineWidth = item->style().styleMM(Sid::arpeggioLineWidth);
 
     painter->setPen(Pen(item->curColor(), lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->save();
@@ -521,7 +521,7 @@ void TDraw::draw(const Arpeggio* item, Painter* painter)
 
     case ArpeggioType::BRACKET:
     {
-        double w = item->style().styleS(Sid::ArpeggioHookLen).val() * item->spatium();
+        double w = item->style().styleS(Sid::arpeggioHookLen).val() * item->spatium();
         painter->drawLine(LineF(0.0, y1, w, y1));
         painter->drawLine(LineF(0.0, y2, w, y2));
         painter->drawLine(LineF(0.0, y1 - lineWidth / 2, 0.0, y2 + lineWidth / 2));
@@ -825,7 +825,8 @@ void TDraw::draw(const BarLine* item, Painter* painter)
     if (s && s->isEndBarLineType() && !item->score()->printing()) {
         Measure* m = s->measure();
         if (m->isIrregular() && item->score()->markIrregularMeasures() && !m->isMMRest()) {
-            painter->setPen(item->configuration()->formattingMarksColor());
+            painter->setPen(item->configuration()->formattingColor());
+
             Font f(u"Edwin", Font::Type::Text);
             f.setPointSizeF(12 * item->spatium() / SPATIUM20);
             f.setBold(true);
@@ -990,7 +991,7 @@ void TDraw::draw(const Box* item, Painter* painter)
         pen.setCapStyle(PenCapStyle::SquareCap);
         pen.setColor(showHighlightedFrame
                      ? item->configuration()->selectionColor()
-                     : item->configuration()->formattingMarksColor());
+                     : item->configuration()->formattingColor());
         pen.setDashPattern({ 1, 3 });
 
         painter->setBrush(BrushStyle::NoBrush);
@@ -1049,7 +1050,7 @@ void TDraw::draw(const Bracket* item, Painter* painter)
         double h = ldata->bracketHeight;
         double spatium = item->spatium();
         double w = item->style().styleMM(Sid::bracketWidth);
-        double bd = (item->style().styleSt(Sid::MusicalSymbolFont) == "Leland") ? spatium * .5 : spatium * .25;
+        double bd = (item->style().styleSt(Sid::musicalSymbolFont) == "Leland") ? spatium * .5 : spatium * .25;
         Pen pen(item->curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
         painter->drawLine(LineF(0.0, -bd - w * .5, 0.0, h + bd + w * .5));
@@ -1172,7 +1173,7 @@ void TDraw::draw(const FiguredBass* item, Painter* painter)
     if (!item->score()->printing() && item->score()->showUnprintable()) {
         for (double len : ldata->lineLengths) {
             if (len > 0) {
-                painter->setPen(Pen(item->configuration()->formattingMarksColor(), 3));
+                painter->setPen(Pen(item->configuration()->formattingColor(), 3));
                 painter->drawLine(0.0, -2, len, -2);              // -2: 2 rast. un. above digits
             }
         }
@@ -1274,7 +1275,6 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
     }
 
     // Init pen and other values
-    double _spatium = item->spatium() * item->userMag();
     Pen pen(item->curColor());
     pen.setCapStyle(PenCapStyle::FlatCap);
     painter->setBrush(Brush(Color(painter->pen().color())));
@@ -1283,19 +1283,21 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
     double x2 = (item->strings() - 1) * ldata->stringDist;
 
     // Draw the nut
-    pen.setWidthF(ldata->nutLw);
+    pen.setWidthF(ldata->nutLineWidth);
     painter->setPen(pen);
-    painter->drawLine(LineF(-ldata->stringLw * .5, 0.0, x2 + ldata->stringLw * .5, 0.0));
+    double nutY = ldata->nutY;
+    painter->drawLine(LineF(-ldata->stringLineWidth * .5, nutY, x2 + ldata->stringLineWidth * .5, nutY));
 
     // Draw strings and frets
-    pen.setWidthF(ldata->stringLw);
+    pen.setWidthF(ldata->stringLineWidth);
     painter->setPen(pen);
 
     // y2 is the y val of the bottom fretline
-    double y2 = ldata->fretDist * (item->frets() + .5);
+    double y1 = ldata->stringExtendTop;
+    double y2 = ldata->fretDist * item->frets() + 0.5 * ldata->stringLineWidth + ldata->stringExtendBottom;
     for (int i = 0; i < item->strings(); ++i) {
         double x = ldata->stringDist * i;
-        painter->drawLine(LineF(x, item->fretOffset() ? -_spatium * .2 : 0.0, x, y2));
+        painter->drawLine(LineF(x, y1, x, y2));
     }
     for (int i = 1; i <= item->frets(); ++i) {
         double y = ldata->fretDist * i;
@@ -1303,12 +1305,12 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
     }
 
     // dotd is the diameter of a dot
-    double dotd = _spatium * .49 * item->style().styleD(Sid::fretDotSize);
+    double dotd = ldata->dotDiameter;
 
     // Draw dots, sym pen is used to draw them (and markers)
     Pen symPen(pen);
-    symPen.setCapStyle(PenCapStyle::RoundCap);
-    double symPenWidth = ldata->stringLw * 1.2;
+    symPen.setCapStyle(PenCapStyle::FlatCap);
+    double symPenWidth = ldata->stringLineWidth * 1.2;
     symPen.setWidthF(symPenWidth);
 
     for (auto const& i : item->dots()) {
@@ -1355,7 +1357,7 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
     }
 
     // Draw markers
-    symPen.setWidthF(symPenWidth * 1.2);
+    symPen.setWidthF(ldata->stringLineWidth * 1.2);
     painter->setBrush(BrushStyle::NoBrush);
     painter->setPen(symPen);
     for (auto const& i : item->markers()) {
@@ -1366,7 +1368,7 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
         }
 
         double x = ldata->stringDist * string - ldata->markerSize * .5;
-        double y = -ldata->fretDist - ldata->markerSize * .5;
+        double y = ldata->markerY;
         if (marker.mtype == FretMarkerType::CIRCLE) {
             painter->drawEllipse(RectF(x, y, ldata->markerSize, ldata->markerSize));
         } else if (marker.mtype == FretMarkerType::CROSS) {
@@ -1384,32 +1386,36 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
         double x1    = ldata->stringDist * startString;
         double newX2 = endString == -1 ? x2 : ldata->stringDist * endString;
         double y     = ldata->fretDist * (fret - 1) + ldata->fretDist * .5;
-        pen.setWidthF(dotd * item->style().styleD(Sid::barreLineWidth));
-        pen.setCapStyle(PenCapStyle::RoundCap);
-        painter->setPen(pen);
-        painter->drawLine(LineF(x1, y, newX2, y));
+        if (item->style().styleB(Sid::barreAppearanceSlur)) {
+            pen.setWidthF(0.25 * ldata->stringLineWidth);
+            pen.setCapStyle(PenCapStyle::RoundCap);
+            pen.setJoinStyle(PenJoinStyle::RoundJoin);
+            painter->setPen(pen);
+            painter->setBrush(Brush(pen.color()));
+            painter->drawPath(ldata->slurPath);
+        } else {
+            pen.setWidthF(dotd * item->style().styleD(Sid::barreLineWidth));
+            pen.setCapStyle(PenCapStyle::RoundCap);
+            painter->setPen(pen);
+            painter->drawLine(LineF(x1, y, newX2, y));
+        }
     }
 
     // Draw fret offset number
     if (item->fretOffset() > 0) {
-        double fretNumMag = item->style().styleD(Sid::fretNumMag);
-        Font scaledFont(item->font());
-        scaledFont.setPointSizeF(item->font().pointSizeF()
-                                 * item->userMag()
-                                 * (item->spatium() / SPATIUM20)
-                                 * MScore::pixelRatio
-                                 * fretNumMag);
+        Font scaledFont(item->fretNumFont());
+        scaledFont.setPointSizeF(scaledFont.pointSizeF() * (item->spatium() / SPATIUM20) * MScore::pixelRatio);
         painter->setFont(scaledFont);
-        String text = String::number(item->fretOffset() + 1);
+        String text = ldata->fretText;
 
         if (item->orientation() == Orientation::VERTICAL) {
             if (item->numPos() == 0) {
-                painter->drawText(RectF(-ldata->stringDist * .4, .0, .0, ldata->fretDist),
+                painter->drawText(RectF(-ldata->fretNumPadding, .0, .0, ldata->fretDist),
                                   muse::draw::AlignVCenter | muse::draw::AlignRight | muse::draw::TextDontClip, text);
             } else {
-                painter->drawText(RectF(x2 + (ldata->stringDist * .4), .0, .0, ldata->fretDist),
+                painter->drawText(RectF(x2 + ldata->fretNumPadding, .0, .0, ldata->fretDist),
                                   muse::draw::AlignVCenter | muse::draw::AlignLeft | muse::draw::TextDontClip,
-                                  String::number(item->fretOffset() + 1));
+                                  text);
             }
         } else if (item->orientation() == Orientation::HORIZONTAL) {
             painter->save();
@@ -1424,10 +1430,24 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
             }
             painter->restore();
         }
-        painter->setFont(item->font());
+        painter->setFont(item->fretNumFont());
     }
 
-    // NOTE:JT possible future todo - draw fingerings
+    for (const FretDiagram::FingeringItem& fingeringItem : item->ldata()->fingeringItems) {
+        painter->save();
+
+        Font scaledFont(item->fingeringFont());
+        scaledFont.setPointSizeF(scaledFont.pointSizeF() * (item->spatium() / SPATIUM20) * MScore::pixelRatio);
+        painter->setFont(scaledFont);
+        if (item->orientation() == Orientation::HORIZONTAL) {
+            painter->translate(-translation);
+            painter->rotate(90);
+        }
+
+        painter->drawText(fingeringItem.pos, fingeringItem.fingerNumber);
+
+        painter->restore();
+    }
 
     if (item->orientation() == Orientation::HORIZONTAL) {
         painter->restore();
@@ -2018,7 +2038,8 @@ void TDraw::draw(const LayoutBreak* item, Painter* painter)
         return;
     }
 
-    Pen pen(item->selected() ? item->configuration()->selectionColor() : item->configuration()->formattingMarksColor());
+    Pen pen(item->selected() ? item->configuration()->selectionColor() : item->configuration()->formattingColor());
+
     if (item->score()->isPaletteScore()) {
         pen.setColor(item->configuration()->fontPrimaryColor());
     }
@@ -2226,7 +2247,7 @@ void TDraw::draw(const Note* item, Painter* painter)
         const StaffType* tab = st->staffTypeForElement(item);
         // draw background, if required (to hide a segment of string line or to show a fretting conflict)
         if (!tab->linesThrough() || item->fretConflict()) {
-            double d  = item->spatium() * .1;
+            double d  = item->style().styleS(Sid::tabFretPadding).val() * item->spatium();
             RectF bb = RectF(ldata->bbox().x() - d,
                              tab->fretMaskY() * item->magS(),
                              ldata->bbox().width() + 2 * d,
@@ -2558,23 +2579,23 @@ void TDraw::draw(const SlurSegment* item, Painter* painter)
         painter->setBrush(Brush(pen.color()));
         pen.setCapStyle(PenCapStyle::RoundCap);
         pen.setJoinStyle(PenJoinStyle::RoundJoin);
-        pen.setWidthF(item->style().styleMM(Sid::SlurEndWidth) * mag);
+        pen.setWidthF(item->style().styleMM(Sid::slurEndWidth) * mag);
         break;
     case SlurStyleType::Dotted:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setCapStyle(PenCapStyle::RoundCap);           // round dots
         pen.setDashPattern(dotted);
-        pen.setWidthF(item->style().styleMM(Sid::SlurDottedWidth) * mag);
+        pen.setWidthF(item->style().styleMM(Sid::slurDottedWidth) * mag);
         break;
     case SlurStyleType::Dashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(dashed);
-        pen.setWidthF(item->style().styleMM(Sid::SlurDottedWidth) * mag);
+        pen.setWidthF(item->style().styleMM(Sid::slurDottedWidth) * mag);
         break;
     case SlurStyleType::WideDashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(wideDashed);
-        pen.setWidthF(item->style().styleMM(Sid::SlurDottedWidth) * mag);
+        pen.setWidthF(item->style().styleMM(Sid::slurDottedWidth) * mag);
         break;
     case SlurStyleType::Undefined:
         break;
@@ -2592,7 +2613,7 @@ void TDraw::draw(const Spacer* item, Painter* painter)
 
     auto conf = item->configuration();
 
-    Pen pen(item->selected() ? conf->selectionColor() : conf->formattingMarksColor(), item->spatium()* 0.3);
+    Pen pen(item->selected() ? conf->selectionColor() : conf->formattingColor(), item->spatium()* 0.3);
 
     painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);
@@ -2616,7 +2637,7 @@ void TDraw::draw(const StaffState* item, Painter* painter)
     const StaffState::LayoutData* ldata = item->ldata();
     auto conf = item->configuration();
 
-    Pen pen(item->selected() ? conf->selectionColor() : conf->formattingMarksColor(),
+    Pen pen(item->selected() ? conf->selectionColor() : conf->formattingColor(),
             ldata->lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);
@@ -2649,7 +2670,7 @@ void TDraw::draw(const StaffTypeChange* item, Painter* painter)
     double w  = _spatium * 2.5;
     double lineDist = 0.35;           // line distance for the icon 'staff lines'
     // draw icon rectangle
-    painter->setPen(Pen(item->selected() ? conf->selectionColor() : conf->formattingMarksColor(),
+    painter->setPen(Pen(item->selected() ? conf->selectionColor() : conf->formattingColor(),
                         item->lw(), PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
     painter->setBrush(BrushStyle::NoBrush);
     painter->drawRect(0, 0, w, h);
@@ -2668,7 +2689,7 @@ void TDraw::draw(const StaffTypeChange* item, Painter* painter)
     }
     // calculate starting point Y for the lines from half the icon height (2.5) so staff lines appear vertically centered
     double startY = 1.25 - (lines - 1) * lineDist * 0.5;
-    painter->setPen(Pen(item->selected() ? conf->selectionColor() : conf->formattingMarksColor(),
+    painter->setPen(Pen(item->selected() ? conf->selectionColor() : conf->formattingColor(),
                         2.5, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
     for (int i=0; i < lines; i++) {
         int y = (startY + i * lineDist) * _spatium;
@@ -2813,7 +2834,7 @@ void TDraw::draw(const Symbol* item, Painter* painter)
         // Draw background for parentheses on TAB staves
         auto config = item->configuration();
         const Symbol::LayoutData* ldata = item->ldata();
-        double d = item->spatium() * .1;
+        double d = item->style().styleS(Sid::tabFretPadding).val() * item->spatium();
         RectF bb = RectF(ldata->bbox().x() - d,
                          ldata->bbox().y() - d,
                          ldata->bbox().width() + 2 * d,
@@ -2980,23 +3001,23 @@ void TDraw::draw(const TieSegment* item, Painter* painter)
         painter->setBrush(Brush(pen.color()));
         pen.setCapStyle(PenCapStyle::RoundCap);
         pen.setJoinStyle(PenJoinStyle::RoundJoin);
-        pen.setWidthF(item->style().styleMM(Sid::TieEndWidth) * mag);
+        pen.setWidthF(item->style().styleMM(Sid::tieEndWidth) * mag);
         break;
     case SlurStyleType::Dotted:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setCapStyle(PenCapStyle::RoundCap);           // True dots
         pen.setDashPattern(dotted);
-        pen.setWidthF(item->style().styleMM(Sid::TieDottedWidth) * mag);
+        pen.setWidthF(item->style().styleMM(Sid::tieDottedWidth) * mag);
         break;
     case SlurStyleType::Dashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(dashed);
-        pen.setWidthF(item->style().styleMM(Sid::TieDottedWidth) * mag);
+        pen.setWidthF(item->style().styleMM(Sid::tieDottedWidth) * mag);
         break;
     case SlurStyleType::WideDashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(wideDashed);
-        pen.setWidthF(item->style().styleMM(Sid::TieDottedWidth) * mag);
+        pen.setWidthF(item->style().styleMM(Sid::tieDottedWidth) * mag);
         break;
     case SlurStyleType::Undefined:
         break;

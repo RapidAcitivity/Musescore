@@ -129,6 +129,16 @@ double FontsEngine::height(const Font& f) const
     return from_f26d6(rf->face->ascent() + rf->face->descent()) * rf->pixelScale();
 }
 
+double FontsEngine::capHeight(const Font& f) const
+{
+    RequireFace* rf = fontFace(f);
+    IF_ASSERT_FAILED(rf && rf->face) {
+        return 0.0;
+    }
+
+    return from_f26d6(rf->face->capHeight()) * rf->pixelScale();
+}
+
 double FontsEngine::ascent(const Font& f) const
 {
     RequireFace* rf = fontFace(f);
@@ -548,9 +558,9 @@ FontsEngine::RequireFace* FontsEngine::fontFace(const Font& f, bool isSymbolMode
     //! NOTE We are looking for the font face we real need among the previously loaded ones
     //! IMPORTANT We use font faces with a fixed pixelSize, so we need to find the right face only from the data
     IFontFace* face = nullptr;
-    for (IFontFace* f : m_loadedFaces) {
-        if (f->key().dataKey == actualDataKey && f->isSymbolMode() == isSymbolMode) {
-            face = f;
+    for (IFontFace* ff : m_loadedFaces) {
+        if (ff->key().dataKey == actualDataKey && ff->isSymbolMode() == isSymbolMode) {
+            face = ff;
             break;
         }
     }
@@ -578,9 +588,9 @@ FontsEngine::RequireFace* FontsEngine::fontFace(const Font& f, bool isSymbolMode
     IFontFace* subtitutionFace = nullptr;
     auto subtitutionFontDataKeys = fontsDatabase()->substitutionFonts(requireKey.type);
     for (const FontDataKey& dataKey : subtitutionFontDataKeys) {
-        for (IFontFace* f : m_loadedFaces) {
-            if (f->key().dataKey == dataKey && f->isSymbolMode() == isSymbolMode) {
-                subtitutionFace = f;
+        for (IFontFace* ff : m_loadedFaces) {
+            if (ff->key().dataKey == dataKey && ff->isSymbolMode() == isSymbolMode) {
+                subtitutionFace = ff;
                 break;
             }
         }
